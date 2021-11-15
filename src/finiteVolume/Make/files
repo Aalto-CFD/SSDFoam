@@ -1,0 +1,3 @@
+finiteVolume/convectionSchemes/gaussScaleSelectiveConvectionScheme/gaussScaleSelectiveConvectionSchemes.C
+
+LIB = $(FOAM_USER_LIBBIN)/libSSD

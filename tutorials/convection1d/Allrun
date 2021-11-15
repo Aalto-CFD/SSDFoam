@@ -1,0 +1,49 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+foamListTimes -rm
+rm -r postProcessing*
+rm -r 0
+cp -r 0.orig 0
+blockMesh
+
+foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss linear" system/fvSchemes
+# foamDictionary -entry "divSchemes/div(phi,T)" -set "GaussScaleSelective linear linear" system/fvSchemes
+explicitRK4scalarTransportFoam
+postProcess -func graphCell
+mv postProcessing postProcessing-CD2
+foamListTimes -rm
+
+# SSDexplicitRK4ScalarTransportFoam
+# postProcess -func graphCell
+# mv postProcessing postProcessing-high-level
+# foamListTimes -rm
+
+schemeStart="GaussScaleSelective Gauss linear orthogonal"
+
+foamDictionary -entry "divSchemes/div(phi,T)" -set "${schemeStart} 1.0 upwind linear" system/fvSchemes
+explicitRK4scalarTransportFoam
+postProcess -func graphCell
+mv postProcessing postProcessing-1
+foamListTimes -rm
+
+foamDictionary -entry "divSchemes/div(phi,T)" -set "${schemeStart} 2.0 upwind linear" system/fvSchemes
+explicitRK4scalarTransportFoam
+postProcess -func graphCell
+mv postProcessing postProcessing-2
+foamListTimes -rm
+
+foamDictionary -entry "divSchemes/div(phi,T)" -set "${schemeStart} 4.0 upwind linear" system/fvSchemes
+explicitRK4scalarTransportFoam
+postProcess -func graphCell
+mv postProcessing postProcessing-4
+foamListTimes -rm
+
+foamDictionary -entry "divSchemes/div(phi,T)" -set "${schemeStart} 8.0 upwind linear" system/fvSchemes
+explicitRK4scalarTransportFoam
+postProcess -func graphCell
+mv postProcessing postProcessing-8
+# foamListTimes -rm
+
+
+#------------------------------------------------------------------------------

@@ -1,0 +1,72 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField nonuniform #codeStream
+{
+    // {
+        codeInclude
+        #{
+            #include "fvCFD.H"
+        #};
+        codeOptions
+        #{
+            -I$(LIB_SRC)/finiteVolume/lnInclude \
+            -I$(LIB_SRC)/meshTools/lnInclude
+        #};
+        codeLibs
+        #{
+            -lmeshTools \
+            -lfiniteVolume
+        #};
+        code
+        #{
+            const IOdictionary& d = static_cast<const IOdictionary&>(dict);
+            const fvMesh& mesh = refCast<const fvMesh>(d.db());
+            scalarField T(mesh.nCells(), 0.);
+            scalar L = 2*constant::mathematical::pi;
+            scalar sigma = L/20; // width of the Gaussian
+            scalar x0 = 0; // center of the Gaussian
+            forAll(T, i)
+            {
+                const scalar x = mesh.C()[i][0];
+                T[i] = exp(-((x-x0)*(x-x0))/(2*sigma*sigma));
+            }
+            // writeEntry(os, "", T);
+            // Info << T;
+            os << T;
+        #};
+    // };
+};
+
+boundaryField
+{
+    left
+    {
+        type            cyclic;
+    }
+    right
+    {
+        type            cyclic;
+    }
+    empty
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //
