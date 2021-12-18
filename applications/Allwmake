@@ -2,5 +2,3 @@
 cd ${0%/*} || exit 1    # run from this directory
 
 wmake solvers/basic/explicitRK4scalarTransportFoam
-wmake solvers/basic/SSDscalarTransportFoam/SSDexplicitRK4ScalarTransportFoam
-wmake solvers/basic/SSDscalarTransportFoam/SSDimplicitScalarTransportFoam
