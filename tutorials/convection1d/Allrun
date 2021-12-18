@@ -10,21 +10,21 @@ blockMesh
 foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss linear" \
     system/fvSchemes
 explicitRK4scalarTransportFoam
-postProcess -func graphCell -latestTime
+postProcess -func singleGraph -latestTime
 mv postProcessing postProcessing-CD
 foamListTimes -rm
 
 foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss upwind" \
     system/fvSchemes
 explicitRK4scalarTransportFoam
-postProcess -func graphCell -latestTime
+postProcess -func singleGraph -latestTime
 mv postProcessing postProcessing-UD
 foamListTimes -rm
 
 foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss blended 0.95" \
     system/fvSchemes
 explicitRK4scalarTransportFoam
-postProcess -func graphCell -latestTime
+postProcess -func singleGraph -latestTime
 mv postProcessing postProcessing-BD
 foamListTimes -rm
 
@@ -32,7 +32,7 @@ foamDictionary -entry "divSchemes/div(phi,T)" \
     -set "GaussScaleSelective Gauss linear orthogonal 2.0 upwind linear" \
     system/fvSchemes
 explicitRK4scalarTransportFoam
-postProcess -func graphCell -latestTime
+postProcess -func singleGraph -latestTime
 mv postProcessing postProcessing-SSD
 foamListTimes -rm
 

@@ -24,7 +24,7 @@ params = {
 
 matplotlib.rcParams.update(params)
 
-sample_path = os.path.join('graphCell', '3', 'line_T.xy')
+sample_path = os.path.join('singleGraph', '3', 'line_T.xy')
 cases = [
     dict(
         id='SSD',
