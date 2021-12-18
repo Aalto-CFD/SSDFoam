@@ -21,9 +21,7 @@ end             ($X1 0 0);
 
 fields          ("T");
 
-axis            "x"; // The independent variable of the graph. Can be "x",
-                          // "y", "z", "xyz" (all coordinates written out), or
-                          // "distance" (from the start point).
+axis            "x";
 
 #includeEtc "caseDicts/postProcessing/graphs/graphCell.cfg"
 

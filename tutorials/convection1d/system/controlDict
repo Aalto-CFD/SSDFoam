@@ -14,7 +14,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     scalarTransportFoam;
+application     explicitRK4scalarTransportFoam;
 
 startFrom       startTime;
 
@@ -30,7 +30,7 @@ adjustTimeStep  no;
 
 maxCo           0.1;
 
-writeControl    runTime; //adjustableRunTime;
+writeControl    runTime;
 
 writeInterval   0.1;
 
@@ -49,6 +49,5 @@ timePrecision   6;
 runTimeModifiable true;
 
 libs ( "libSSD.so" );
-
 
 // ************************************************************************* //

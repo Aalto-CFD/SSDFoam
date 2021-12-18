@@ -16,7 +16,7 @@ FoamFile
 
 // 1D uniform mesh
 
-convertToMeters 1;
+scale 1;
 
 L #calc "2*constant::mathematical::pi";
 N 128;
@@ -94,10 +94,6 @@ boundary
             (0 4 6 2)
         );
     }
-);
-
-mergePatchPairs
-(
 );
 
 // ************************************************************************* //

@@ -16,7 +16,6 @@ FoamFile
 
 ddtSchemes
 {
-    default         Euler;
 }
 
 gradSchemes
@@ -26,10 +25,7 @@ gradSchemes
 
 divSchemes
 {
-    default         none;
-    div(phi,T)      GaussScaleSelective Gauss linear orthogonal 8 upwind linear;
-    div(phi,Tprime) Gauss upwind;
-    div(phi,(T+Tprime)) Gauss linear;
+    div(phi,T)      GaussScaleSelective Gauss linear orthogonal 2 upwind linear;
 }
 
 laplacianSchemes
