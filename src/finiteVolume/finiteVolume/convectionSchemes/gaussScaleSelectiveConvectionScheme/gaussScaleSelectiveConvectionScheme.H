@@ -24,6 +24,9 @@ License
 Class
     Foam::fv::gaussScaleSelectiveConvectionScheme
 
+Group
+    grpFvConvectionSchemes
+
 Description
     Second-order convection using face-gradients, Gauss' theorem and
     scale-selective discretization technique.
@@ -72,6 +75,13 @@ class gaussScaleSelectiveConvectionScheme
         tmp<surfaceScalarField> DxDyDz_;
 
 
+    // Private Member Functions
+
+        //- No copy construct
+        gaussScaleSelectiveConvectionScheme(const gaussScaleSelectiveConvectionScheme&) = delete;
+
+        //- No copy assignment
+        void operator=(const gaussScaleSelectiveConvectionScheme&) = delete;
 
 public:
 
@@ -144,11 +154,6 @@ public:
               / (4.0*constant::mathematical::pi*constant::mathematical::pi);
         }
 
-        //- Disallow default bitwise copy construction
-        gaussScaleSelectiveConvectionScheme(
-            const gaussScaleSelectiveConvectionScheme&
-        ) = delete;
-
 
     // Member Functions
 
@@ -177,12 +182,6 @@ public:
             const surfaceScalarField&,
             const GeometricField<Type, fvPatchField, volMesh>&
         ) const;
-
-
-    // Member Operators
-
-        //- Disallow default bitwise assignment
-        void operator=(const gaussScaleSelectiveConvectionScheme&) = delete;
 };
 
 

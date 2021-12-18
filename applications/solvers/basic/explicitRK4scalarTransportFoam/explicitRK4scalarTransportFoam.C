@@ -24,6 +24,9 @@ License
 Application
     explicitRK4scalarTransportFoam
 
+Group
+    grpBasicSolvers
+
 Description
     Solves the steady or transient transport equation for a passive scalar using
     4th order Runge-Kutta explicit time-stepping.
@@ -31,14 +34,19 @@ Description
 \*---------------------------------------------------------------------------*/
 
 #include "fvCFD.H"
-#include "fvModels.H"
-#include "fvConstraints.H"
+#include "fvOptions.H"
 #include "simpleControl.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
 {
+    argList::addNote
+    (
+        "Passive scalar transport equation solver."
+    );
+
+    #include "addCheckCaseOptions.H"
     #include "setRootCaseLists.H"
     #include "createTime.H"
     #include "createMesh.H"
@@ -53,7 +61,7 @@ int main(int argc, char *argv[])
 
     #include "CourantNo.H"
 
-    while (simple.loop(runTime))
+    while (simple.loop())
     {
         Info<< "Time = " << runTime.timeName() << nl << endl;
         // RK4: step 1
