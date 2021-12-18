@@ -7,43 +7,33 @@ rm -r 0
 cp -r 0.orig 0
 blockMesh
 
-foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss linear" system/fvSchemes
-# foamDictionary -entry "divSchemes/div(phi,T)" -set "GaussScaleSelective linear linear" system/fvSchemes
+foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss linear" \
+    system/fvSchemes
 explicitRK4scalarTransportFoam
-postProcess -func graphCell
-mv postProcessing postProcessing-CD2
+postProcess -func graphCell -latestTime
+mv postProcessing postProcessing-CD
 foamListTimes -rm
 
-# SSDexplicitRK4ScalarTransportFoam
-# postProcess -func graphCell
-# mv postProcessing postProcessing-high-level
-# foamListTimes -rm
-
-schemeStart="GaussScaleSelective Gauss linear orthogonal"
-
-foamDictionary -entry "divSchemes/div(phi,T)" -set "${schemeStart} 1.0 upwind linear" system/fvSchemes
+foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss upwind" \
+    system/fvSchemes
 explicitRK4scalarTransportFoam
-postProcess -func graphCell
-mv postProcessing postProcessing-1
+postProcess -func graphCell -latestTime
+mv postProcessing postProcessing-UD
 foamListTimes -rm
 
-foamDictionary -entry "divSchemes/div(phi,T)" -set "${schemeStart} 2.0 upwind linear" system/fvSchemes
+foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss blended 0.9" \
+    system/fvSchemes
 explicitRK4scalarTransportFoam
-postProcess -func graphCell
-mv postProcessing postProcessing-2
+postProcess -func graphCell -latestTime
+mv postProcessing postProcessing-BD
 foamListTimes -rm
 
-foamDictionary -entry "divSchemes/div(phi,T)" -set "${schemeStart} 4.0 upwind linear" system/fvSchemes
+foamDictionary -entry "divSchemes/div(phi,T)" \
+    -set "GaussScaleSelective Gauss linear orthogonal 2.0 upwind linear" \
+    system/fvSchemes
 explicitRK4scalarTransportFoam
-postProcess -func graphCell
-mv postProcessing postProcessing-4
+postProcess -func graphCell -latestTime
+mv postProcessing postProcessing-SSD
 foamListTimes -rm
-
-foamDictionary -entry "divSchemes/div(phi,T)" -set "${schemeStart} 8.0 upwind linear" system/fvSchemes
-explicitRK4scalarTransportFoam
-postProcess -func graphCell
-mv postProcessing postProcessing-8
-# foamListTimes -rm
-
 
 #------------------------------------------------------------------------------
