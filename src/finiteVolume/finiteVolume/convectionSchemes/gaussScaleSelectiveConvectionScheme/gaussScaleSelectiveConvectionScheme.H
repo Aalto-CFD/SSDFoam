@@ -62,7 +62,7 @@ class gaussScaleSelectiveConvectionScheme
 
         const fvMesh& mesh_;
 
-        tmp<laplacianScheme<Type, scalar>> thiPassFilter;
+        tmp<laplacianScheme<Type, scalar>> thiPassFilter_;
 
         scalar filterScope_;
 
@@ -94,7 +94,7 @@ public:
         :
             convectionScheme<Type>(mesh, faceFlux),
             mesh_(mesh),
-            thiPassFilter(laplacianFiter),
+            thiPassFilter_(laplacianFiter),
             filterScope_(filterScope),
             tloResInterpScheme_(loResScheme),
             thiResInterpScheme_(hiResScheme),
@@ -102,7 +102,7 @@ public:
                 filterScope_*filterScope_
               * Foam::pow(mesh_.surfaceInterpolation::deltaCoeffs() ,-2.0)
               / (4.0*constant::mathematical::pi*constant::mathematical::pi)
-          )
+            )
         {}
 
         //- Construct from flux and Istream
@@ -115,7 +115,7 @@ public:
         :
             convectionScheme<Type>(mesh, faceFlux),
             mesh_(mesh),
-            thiPassFilter(nullptr),
+            thiPassFilter_(nullptr),
             filterScope_(0),
             tloResInterpScheme_(nullptr),
             thiResInterpScheme_(nullptr),

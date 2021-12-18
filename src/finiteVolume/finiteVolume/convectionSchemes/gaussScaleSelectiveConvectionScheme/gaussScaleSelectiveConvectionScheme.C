@@ -57,7 +57,7 @@ gaussScaleSelectiveConvectionScheme<Type>::interpolate
 ) const
 {
     GeometricField<Type, fvPatchField, volMesh> vfPrime =
-        thiPassFilter.ref().fvcLaplacian(DxDyDz_, vf);
+        thiPassFilter_.ref().fvcLaplacian(DxDyDz_, vf);
     return thiResInterpScheme_().interpolate(vf+vfPrime)
          - tloResInterpScheme_().interpolate(vfPrime);
 }
