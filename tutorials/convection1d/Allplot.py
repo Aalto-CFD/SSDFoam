@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
-font_size = 9
+font_size = 15
 params = {
     'image.origin': 'lower',
     'image.interpolation': 'nearest',
@@ -15,7 +15,7 @@ params = {
     'lines.markersize': 3,
     'lines.linewidth': 1.4,
     'font.size': font_size,
-    'legend.fontsize': font_size,
+    'legend.fontsize': 13,
     'xtick.labelsize': font_size,
     'text.usetex': True,
     'ytick.labelsize': font_size,
@@ -66,4 +66,4 @@ plt.ylabel('T, [-]')
 plt.xticks(ticks=[-np.pi, -0.5*np.pi, 0, 0.5*np.pi, np.pi], labels=['$-\pi$', '$-\pi/2$', '0', '$\pi$/2', '$\pi$'])
 plt.legend()
 plt.grid()
-plt.savefig('convection1d.png')
+plt.savefig('convection1d.pdf')
