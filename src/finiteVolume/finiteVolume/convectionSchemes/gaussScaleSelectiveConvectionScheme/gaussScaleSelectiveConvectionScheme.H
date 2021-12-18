@@ -122,7 +122,7 @@ public:
             DxDyDz_(nullptr)
         {
 
-            thiPassFilter = tmp<laplacianScheme<Type, scalar>>
+            thiPassFilter_ = tmp<laplacianScheme<Type, scalar>>
             (
                 laplacianScheme<Type, scalar>::New(mesh, is)
             );
