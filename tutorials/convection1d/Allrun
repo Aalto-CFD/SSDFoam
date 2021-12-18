@@ -21,7 +21,7 @@ postProcess -func graphCell -latestTime
 mv postProcessing postProcessing-UD
 foamListTimes -rm
 
-foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss blended 0.9" \
+foamDictionary -entry "divSchemes/div(phi,T)" -set "Gauss blended 0.95" \
     system/fvSchemes
 explicitRK4scalarTransportFoam
 postProcess -func graphCell -latestTime
