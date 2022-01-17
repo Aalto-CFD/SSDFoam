@@ -99,6 +99,7 @@ public:
             tloResInterpScheme_(loResScheme),
             thiResInterpScheme_(hiResScheme),
             DxDyDz_(
+                "DxDyDz_",
                 filterScope_*filterScope_
               * Foam::pow(mesh_.surfaceInterpolation::deltaCoeffs() ,-2.0)
               / (4.0*constant::mathematical::pi*constant::mathematical::pi)
