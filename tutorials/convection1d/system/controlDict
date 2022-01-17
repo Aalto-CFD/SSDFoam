@@ -15,7 +15,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-application     explicitRK4scalarTransportFoam;
+application     scalarTransportFoam;
 
 startFrom       startTime;
 

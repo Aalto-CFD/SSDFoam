@@ -17,6 +17,7 @@ FoamFile
 
 ddtSchemes
 {
+    default         backward;
 }
 
 gradSchemes
@@ -26,7 +27,7 @@ gradSchemes
 
 divSchemes
 {
-    div(phi,T)      GaussScaleSelective Gauss linear orthogonal 2 upwind linear;
+    div(phi,T)      GaussScaleSelective Gauss linear orthogonal 2.0 upwind blended 1;
 }
 
 laplacianSchemes

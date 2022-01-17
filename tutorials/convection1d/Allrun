@@ -29,7 +29,7 @@ mv postProcessing postProcessing-BD
 foamListTimes -rm
 
 foamDictionary -entry "divSchemes/div(phi,T)" \
-    -set "GaussScaleSelective Gauss linear orthogonal 2.0 upwind linear" \
+    -set "GaussScaleSelective Gauss linear orthogonal 2.0 upwind blended 1.0" \
     system/fvSchemes
 explicitRK4scalarTransportFoam
 postProcess -func singleGraph -latestTime

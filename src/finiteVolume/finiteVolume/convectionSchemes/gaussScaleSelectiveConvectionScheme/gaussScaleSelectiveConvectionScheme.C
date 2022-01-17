@@ -43,8 +43,7 @@ template<class Type>
 const surfaceInterpolationScheme<Type>&
 gaussScaleSelectiveConvectionScheme<Type>::interpScheme() const
 {
-    NotImplemented;
-    return NullObjectRef<surfaceInterpolationScheme<Type>>();
+    return thiResInterpScheme_();
 }
 
 
@@ -83,8 +82,56 @@ gaussScaleSelectiveConvectionScheme<Type>::fvmDiv
     const GeometricField<Type, fvPatchField, volMesh>& vf
 ) const
 {
-    NotImplemented;
-    return NullObjectRef<tmp<fvMatrix<Type>>>();
+    tmp<surfaceScalarField> tweights = thiResInterpScheme_().weights(vf);
+    const surfaceScalarField& weights = tweights();
+
+    tmp<fvMatrix<Type>> tfvm
+    (
+        new fvMatrix<Type>
+        (
+            vf,
+            faceFlux.dimensions()*vf.dimensions()
+        )
+    );
+    fvMatrix<Type>& fvm = tfvm.ref();
+
+    fvm.lower() = -weights.primitiveField()*faceFlux.primitiveField();
+    fvm.upper() = fvm.lower() + faceFlux.primitiveField();
+    fvm.negSumDiag();
+
+    forAll(vf.boundaryField(), patchi)
+    {
+        const fvPatchField<Type>& psf = vf.boundaryField()[patchi];
+        const fvsPatchScalarField& patchFlux = faceFlux.boundaryField()[patchi];
+        const fvsPatchScalarField& pw = weights.boundaryField()[patchi];
+
+        fvm.internalCoeffs()[patchi] = patchFlux*psf.valueInternalCoeffs(pw);
+        fvm.boundaryCoeffs()[patchi] = -patchFlux*psf.valueBoundaryCoeffs(pw);
+    }
+
+    if (thiResInterpScheme_().corrected())
+    {
+        fvm += fvc::surfaceIntegrate(faceFlux*thiResInterpScheme_().correction(vf));
+    }
+
+    GeometricField<Type, fvPatchField, volMesh> vfPrime =
+        thiPassFilter_.ref().fvcLaplacian(DxDyDz_, vf);
+
+    tmp<GeometricField<Type, fvPatchField, volMesh>> tConvection
+    (
+        fvc::surfaceIntegrate(faceFlux*(
+            thiResInterpScheme_().interpolate(vfPrime)
+          - tloResInterpScheme_().interpolate(vfPrime)))
+    );
+
+    tConvection.ref().rename
+    (
+        "convection(" + faceFlux.name() + ',' + vf.name() + ')'
+    );
+
+    fvm += tConvection;
+
+    return tfvm;
 }
 
 

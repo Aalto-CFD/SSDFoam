@@ -1,0 +1,41 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+foamListTimes -rm
+rm -r postProcessing*
+rm -r 0
+cp -r 0.orig 0
+blockMesh
+
+foamDictionary -entry "divSchemes/div(phi,T)" \
+    -set "GaussScaleSelective Gauss linear orthogonal 2.0 upwind blended 1.0" \
+    system/fvSchemes
+
+explicitRK4scalarTransportFoam
+postProcess -func singleGraph -latestTime
+mv postProcessing postProcessing-explicit
+foamListTimes -rm
+
+foamDictionary -entry "ddtSchemes/default" -set "Euler" \
+    system/fvSchemes
+scalarTransportFoam
+postProcess -func singleGraph -latestTime
+mv postProcessing postProcessing-implicit-Euler
+foamListTimes -rm
+
+foamDictionary -entry "ddtSchemes/default" -set "backward" \
+    system/fvSchemes
+scalarTransportFoam
+postProcess -func singleGraph -latestTime
+mv postProcessing postProcessing-implicit-backward
+foamListTimes -rm
+
+foamDictionary -entry "ddtSchemes/default" -set "CrankNicolson 0.9" \
+    system/fvSchemes
+scalarTransportFoam
+postProcess -func singleGraph -latestTime
+mv postProcessing postProcessing-implicit-Crank-Nicolson
+foamListTimes -rm
+
+
+#------------------------------------------------------------------------------
