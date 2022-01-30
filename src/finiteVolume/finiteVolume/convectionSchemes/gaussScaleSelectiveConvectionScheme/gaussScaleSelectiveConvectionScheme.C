@@ -40,6 +40,72 @@ namespace fv
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 template<class Type>
+gaussScaleSelectiveConvectionScheme<Type>::gaussScaleSelectiveConvectionScheme
+(
+    const fvMesh& mesh,
+    const surfaceScalarField& faceFlux,
+    const tmp<laplacianScheme<Type, scalar>> laplacianFiter,
+    const scalar& filterScope,
+    const tmp<surfaceInterpolationScheme<Type>>& loResScheme,
+    const tmp<surfaceInterpolationScheme<Type>>& hiResScheme
+)
+:
+    convectionScheme<Type>(mesh, faceFlux),
+    mesh_(mesh),
+    thiPassFilter_(laplacianFiter),
+    filterScope_(filterScope),
+    tloResInterpScheme_(loResScheme),
+    thiResInterpScheme_(hiResScheme),
+    DxDyDz_(
+        "DxDyDz_",
+        filterScope_*filterScope_
+      * Foam::pow(mesh_.surfaceInterpolation::deltaCoeffs() ,-2.0)
+      / (4.0*constant::mathematical::pi*constant::mathematical::pi)
+    )
+{}
+
+
+template<class Type>
+gaussScaleSelectiveConvectionScheme<Type>::gaussScaleSelectiveConvectionScheme
+(
+    const fvMesh& mesh,
+    const surfaceScalarField& faceFlux,
+    Istream& is
+)
+:
+    convectionScheme<Type>(mesh, faceFlux),
+    mesh_(mesh),
+    thiPassFilter_(nullptr),
+    filterScope_(0),
+    tloResInterpScheme_(nullptr),
+    thiResInterpScheme_(nullptr),
+    DxDyDz_(nullptr)
+{
+
+    thiPassFilter_ = tmp<laplacianScheme<Type, scalar>>
+    (
+        laplacianScheme<Type, scalar>::New(mesh, is)
+    );
+
+    is >> filterScope_;
+
+    tloResInterpScheme_ = tmp<surfaceInterpolationScheme<Type>>
+    (
+        surfaceInterpolationScheme<Type>::New(mesh, faceFlux, is)
+    );
+
+    thiResInterpScheme_ = tmp<surfaceInterpolationScheme<Type>>
+    (
+        surfaceInterpolationScheme<Type>::New(mesh, faceFlux, is)
+    );
+
+    DxDyDz_ = filterScope_*filterScope_
+      * Foam::pow(mesh_.surfaceInterpolation::deltaCoeffs() ,-2.0)
+      / (4.0*constant::mathematical::pi*constant::mathematical::pi);
+}
+
+
+template<class Type>
 const surfaceInterpolationScheme<Type>&
 gaussScaleSelectiveConvectionScheme<Type>::interpScheme() const
 {
